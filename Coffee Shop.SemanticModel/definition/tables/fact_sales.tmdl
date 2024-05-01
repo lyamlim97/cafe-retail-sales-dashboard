@@ -1,0 +1,134 @@
+table fact_sales
+	lineageTag: ae503f1d-5262-4dc5-a974-6226fcd702a5
+
+	column order_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 6c3878f4-af61-4dcc-b5a7-934bfcbd3d8e
+		summarizeBy: sum
+		sourceColumn: order_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column line_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 7386151c-ab54-4c5e-9906-3caa0837c95a
+		summarizeBy: sum
+		sourceColumn: line_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_date_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 5b745cde-8c8a-4ae1-9804-3d18bb7c08c6
+		summarizeBy: none
+		sourceColumn: order_date_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_time
+		dataType: dateTime
+		formatString: Long Time
+		lineageTag: 5673c425-906d-4629-ae71-2dfe49934e79
+		summarizeBy: none
+		sourceColumn: order_time
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Time
+
+	column payment_mode_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 86e16d45-a6f1-4dc1-8c46-51c131e3af36
+		summarizeBy: none
+		sourceColumn: payment_mode_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column outlet_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 5d428a3c-b2c3-47d6-bfa5-d250f09c17d5
+		summarizeBy: none
+		sourceColumn: outlet_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 4832cdd0-4398-447e-bcbc-7c87b4bcda6f
+		summarizeBy: none
+		sourceColumn: product_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column unit_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 1fdb25e5-bd74-49bb-ab03-a20a1b153c81
+		summarizeBy: sum
+		sourceColumn: unit_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column gross_total_sales
+		dataType: int64
+		formatString: 0
+		lineageTag: 9ab0ad0d-d63f-4a38-a696-ece51a54a464
+		summarizeBy: sum
+		sourceColumn: gross_total_sales
+
+		annotation SummarizationSetBy = Automatic
+
+	column discount
+		dataType: int64
+		formatString: 0
+		lineageTag: 2578db91-e65c-4c64-be87-fb2d02b9ec69
+		summarizeBy: sum
+		sourceColumn: discount
+
+		annotation SummarizationSetBy = Automatic
+
+	column net_total_sales
+		dataType: int64
+		formatString: 0
+		lineageTag: ca4b905f-cf9f-44d3-83a4-a8d0d7ecd46b
+		summarizeBy: sum
+		sourceColumn: net_total_sales
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_cost
+		dataType: int64
+		formatString: 0
+		lineageTag: da657228-3fcc-4fdc-80db-738229e76f6d
+		summarizeBy: sum
+		sourceColumn: total_cost
+
+		annotation SummarizationSetBy = Automatic
+
+	column gross_profit
+		dataType: int64
+		formatString: 0
+		lineageTag: 103cc6ac-987f-434b-9543-d98391568a5e
+		summarizeBy: sum
+		sourceColumn: gross_profit
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_sales = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Projects\cafe-retail-data-generator\fact_sales.csv"),[Delimiter=",", Columns=13, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"order_id", Int64.Type}, {"line_id", Int64.Type}, {"order_date_id", Int64.Type}, {"order_time", type time}, {"payment_mode_id", Int64.Type}, {"outlet_id", Int64.Type}, {"product_id", Int64.Type}, {"unit_count", Int64.Type}, {"gross_total_sales", Int64.Type}, {"discount", Int64.Type}, {"net_total_sales", Int64.Type}, {"total_cost", Int64.Type}, {"gross_profit", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

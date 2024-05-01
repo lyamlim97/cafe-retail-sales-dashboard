@@ -1,0 +1,87 @@
+table fact_budget
+	lineageTag: 62218c93-2419-4c8e-9ebd-4f7bd4167694
+
+	column outlet_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 48ad8765-33d7-4cbf-9f1f-1e40ee3a615a
+		summarizeBy: none
+		sourceColumn: outlet_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column year_month_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 29ec2894-c9fb-43f8-a209-7408455577be
+		summarizeBy: sum
+		sourceColumn: year_month_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_id
+		dataType: int64
+		formatString: 0
+		lineageTag: dd35bde0-e258-4001-9af7-efb9222232fd
+		summarizeBy: none
+		sourceColumn: product_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column gross_sales_budget
+		dataType: int64
+		formatString: 0
+		lineageTag: b8b474e7-0112-4838-a1d1-b874fce60b2f
+		summarizeBy: sum
+		sourceColumn: gross_sales_budget
+
+		annotation SummarizationSetBy = Automatic
+
+	column discount_budget
+		dataType: int64
+		formatString: 0
+		lineageTag: 07e38c46-25f3-4713-8503-b837840a7e96
+		summarizeBy: sum
+		sourceColumn: discount_budget
+
+		annotation SummarizationSetBy = Automatic
+
+	column cost_budget
+		dataType: int64
+		formatString: 0
+		lineageTag: e1d546c1-ab5d-4e87-82a8-002d7ba3774a
+		summarizeBy: sum
+		sourceColumn: cost_budget
+
+		annotation SummarizationSetBy = Automatic
+
+	column net_sales_budget
+		dataType: int64
+		formatString: 0
+		lineageTag: 8a6c3525-8001-4154-aeee-3117f1e5e280
+		summarizeBy: sum
+		sourceColumn: net_sales_budget
+
+		annotation SummarizationSetBy = Automatic
+
+	column gross_profit_budget
+		dataType: int64
+		formatString: 0
+		lineageTag: d5fc52dc-e57f-4d65-87fa-f60bc6b4f0f8
+		summarizeBy: sum
+		sourceColumn: gross_profit_budget
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_budget = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Projects\cafe-retail-data-generator\fact_budget.csv"),[Delimiter=",", Columns=8, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"outlet_id", Int64.Type}, {"year_month_id", Int64.Type}, {"product_id", Int64.Type}, {"gross_sales_budget", Int64.Type}, {"discount_budget", Int64.Type}, {"cost_budget", Int64.Type}, {"net_sales_budget", Int64.Type}, {"gross_profit_budget", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

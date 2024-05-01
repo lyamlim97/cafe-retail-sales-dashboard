@@ -1,0 +1,70 @@
+table 'Measures Tables'
+	lineageTag: c800c570-216b-484f-8605-4b2b4f1aca0c
+
+	measure 'Gross Sales' = SUM(fact_sales[gross_total_sales]) / 100
+		formatString: #,0.00
+		lineageTag: aa8839ff-4ff0-409a-ba27-c300fb77f4ff
+
+		changedProperty = IsHidden
+
+	measure Discount = SUM(fact_sales[discount]) / 100
+		formatString: #,0.00
+		lineageTag: edfa8865-ed51-4a1b-a911-b59292d9e1af
+
+	measure 'Effective Discount Rate' = ```
+			SUM(fact_sales[discount]) / SUM(fact_sales[gross_total_sales]) 
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 97a26bb7-f06a-48bc-9f94-fdd26fb1d271
+
+	measure 'Net Sales' = SUM(fact_sales[net_total_sales]) / 100
+		formatString: #,0.00
+		lineageTag: 385d04ad-1a6e-46bc-aac1-73e4f077fb58
+
+	measure 'Unit Count' = SUM(fact_sales[unit_count])
+		formatString: #,0
+		lineageTag: 1dd9419c-9619-42e8-bbbe-4e4d920fa65d
+
+	measure 'Order Count' = DISTINCTCOUNT(fact_sales[order_id])
+		formatString: #,0
+		lineageTag: 89d0788d-d0cb-4bf0-944e-fed143a68d67
+
+	measure 'Gross Profit' = SUM(fact_sales[gross_profit]) / 100
+		formatString: #,0.00
+		lineageTag: 942f1245-44b1-48de-814e-21e7efc429e4
+
+	measure 'Gross Profit Margin' = [Gross Profit] / [Net Sales]
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: f87c2371-530c-44c4-b565-764f13851d8e
+
+	measure 'Gross Sales Budget' = CALCULATE(SUM(fact_budget[gross_sales_budget]), USERELATIONSHIP(dim_date[year_month_id], fact_budget[year_month_id])) / 100
+		formatString: #,0.00
+		lineageTag: 2244da87-d15c-4dfc-8a32-680d090145ba
+
+	measure 'Gross Profit Budget' = CALCULATE(SUM(fact_budget[gross_profit_budget]), USERELATIONSHIP(dim_date[year_month_id], fact_budget[year_month_id])) / 100
+		formatString: #,0.00
+		lineageTag: afbeaed9-d3ba-43fd-a469-6732b473d4dd
+
+	measure 'Cups per Order' = [Unit Count] / [Order Count]
+		lineageTag: 52a6062d-96af-4f33-89f9-dcb082eef92c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Net Sales Budget' = CALCULATE(SUM(fact_budget[net_sales_budget]), USERELATIONSHIP(dim_date[year_month_id], fact_budget[year_month_id])) / 100
+		formatString: #,0.00
+		lineageTag: ffe5c989-9a77-41e4-b7b2-82df7c9dbeae
+
+	partition 'Measures Tables' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column1"})
+				in
+				    #"Removed Columns"
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Table
+

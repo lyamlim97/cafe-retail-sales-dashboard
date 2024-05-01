@@ -1,0 +1,32 @@
+table dim_payment_mode
+	lineageTag: eb4d887b-86dd-41bc-8f4a-d72cb169cfc3
+
+	column payment_mode_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 370f25f1-ce16-46b9-8e68-e7daff040ff9
+		summarizeBy: none
+		sourceColumn: payment_mode_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_mode
+		dataType: string
+		lineageTag: 3200c7ce-e0b8-498a-ae2d-1ed72039c565
+		summarizeBy: none
+		sourceColumn: payment_mode
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_payment_mode = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Projects\cafe-retail-data-generator\dim_payment_mode.csv"),[Delimiter=",", Columns=2, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"payment_mode_id", Int64.Type}, {"payment_mode", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

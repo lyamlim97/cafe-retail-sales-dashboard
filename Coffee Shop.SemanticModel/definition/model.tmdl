@@ -1,0 +1,26 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-GB
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["dim_payment_mode","dim_product","Measures Tables","dim_outlet","fact_sales","dim_date","fact_budget"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBIDesktopVersion = 2.128.1177.0 (24.04)
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table DateTableTemplate_c3f1ac14-57c7-4600-a701-606de04dde5c
+ref table dim_payment_mode
+ref table dim_product
+ref table 'Measures Tables'
+ref table dim_outlet
+ref table fact_sales
+ref table dim_date
+ref table LocalDateTable_3b820515-792d-4ace-a161-9ef9c2d3b9cd
+ref table fact_budget
+
