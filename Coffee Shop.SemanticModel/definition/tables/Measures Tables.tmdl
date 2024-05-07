@@ -66,12 +66,14 @@ table 'Measures Tables'
 		formatString: 0
 		lineageTag: 816f2b81-95c5-48eb-a8f4-b2ffec51dee1
 
-	measure 'Net Sales (SMLY)' =
-			CALCULATE(SUM(fact_sales[net_total_sales]) / 100, FILTER(
+	measure 'Net Sales (SMLY)' = ```
+			CALCULATE((SUM(fact_sales[net_total_sales]) / 100) + 0 , FILTER(
 			            ALL(dim_date),
 			            dim_date[month_no] = MAX(dim_date[month_no]) &&
 			            dim_date[year_no] = MAX(dim_date[year_no]) - 1
 			        ))
+			
+			```
 		lineageTag: f8f6f495-c9d5-4c5a-a633-2c7897e8e6d6
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
@@ -79,6 +81,28 @@ table 'Measures Tables'
 	measure 'Last Year' = [Current Month] - 1
 		formatString: 0
 		lineageTag: 4e8c008d-8afa-41ad-b5c5-536070ce73ab
+
+	measure 'Net Sales (LM)' =
+			
+			VAR selected_month = MAX(dim_date[month_no])
+			VAR selected_year = MAX(dim_date[year_no])
+			
+			VAR result = IF(selected_month == 1,
+			        CALCULATE((SUM(fact_sales[net_total_sales]) / 100) + 0 , FILTER(
+			            ALL(dim_date),
+			            dim_date[month_no] = 12 &&
+			            dim_date[year_no] = MAX(dim_date[year_no]) - 1
+			        )),
+			        CALCULATE((SUM(fact_sales[net_total_sales]) / 100) + 0 , FILTER(
+			            ALL(dim_date),
+			            dim_date[month_no] = selected_month - 1 &&
+			            dim_date[year_no] = selected_year
+			        )))
+			
+			RETURN result
+		lineageTag: 741f72dd-38f3-48be-a237-920c48092b9b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	partition 'Measures Tables' = m
 		mode: import
