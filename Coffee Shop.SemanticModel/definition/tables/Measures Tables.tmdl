@@ -74,9 +74,8 @@ table 'Measures Tables'
 			        ))
 			
 			```
+		formatString: #,0.00
 		lineageTag: f8f6f495-c9d5-4c5a-a633-2c7897e8e6d6
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Last Year' = [Current Month] - 1
 		formatString: 0
@@ -100,9 +99,8 @@ table 'Measures Tables'
 			        )))
 			
 			RETURN result
+		formatString: #,0.00
 		lineageTag: 741f72dd-38f3-48be-a237-920c48092b9b
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	partition 'Measures Tables' = m
 		mode: import
