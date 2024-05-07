@@ -54,6 +54,32 @@ table 'Measures Tables'
 		formatString: #,0.00
 		lineageTag: ffe5c989-9a77-41e4-b7b2-82df7c9dbeae
 
+	measure 'Current Date ID' = MAX(dim_date[order_date_id])
+		formatString: 0
+		lineageTag: eda2366e-9560-4daa-941f-21d6b825349b
+
+	measure 'Current Month' = INT(RIGHT(LEFT([Current Date ID], 6), 2))
+		formatString: 0
+		lineageTag: de2c6024-92dd-4472-a7d1-49624bfb3767
+
+	measure 'Current Year' = INT(LEFT([Current Date ID], 4))
+		formatString: 0
+		lineageTag: 816f2b81-95c5-48eb-a8f4-b2ffec51dee1
+
+	measure 'Net Sales (SMLY)' =
+			CALCULATE(SUM(fact_sales[net_total_sales]) / 100, FILTER(
+			            ALL(dim_date),
+			            dim_date[month_no] = MAX(dim_date[month_no]) &&
+			            dim_date[year_no] = MAX(dim_date[year_no]) - 1
+			        ))
+		lineageTag: f8f6f495-c9d5-4c5a-a633-2c7897e8e6d6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Last Year' = [Current Month] - 1
+		formatString: 0
+		lineageTag: 4e8c008d-8afa-41ad-b5c5-536070ce73ab
+
 	partition 'Measures Tables' = m
 		mode: import
 		source =
