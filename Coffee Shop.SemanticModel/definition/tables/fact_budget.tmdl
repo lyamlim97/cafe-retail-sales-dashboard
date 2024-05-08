@@ -1,10 +1,10 @@
 table fact_budget
-	lineageTag: 62218c93-2419-4c8e-9ebd-4f7bd4167694
+	lineageTag: 8b50799c-1ab5-416f-bb50-b8722b3bf82d
 
 	column outlet_id
 		dataType: int64
 		formatString: 0
-		lineageTag: 48ad8765-33d7-4cbf-9f1f-1e40ee3a615a
+		lineageTag: c4921b3a-740f-430d-ae9a-ba761916c625
 		summarizeBy: none
 		sourceColumn: outlet_id
 
@@ -13,7 +13,7 @@ table fact_budget
 	column year_month_id
 		dataType: int64
 		formatString: 0
-		lineageTag: 29ec2894-c9fb-43f8-a209-7408455577be
+		lineageTag: aea004ad-3c29-461c-aa2a-33b81112f127
 		summarizeBy: sum
 		sourceColumn: year_month_id
 
@@ -22,16 +22,25 @@ table fact_budget
 	column product_id
 		dataType: int64
 		formatString: 0
-		lineageTag: dd35bde0-e258-4001-9af7-efb9222232fd
+		lineageTag: 704c77f7-2f01-4a8c-b32b-c2edbd468c15
 		summarizeBy: none
 		sourceColumn: product_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column cups_sold_budget
+		dataType: int64
+		formatString: 0
+		lineageTag: 9d163f30-1f61-4061-9df8-7cc065d7a8d2
+		summarizeBy: sum
+		sourceColumn: cups_sold_budget
 
 		annotation SummarizationSetBy = Automatic
 
 	column gross_sales_budget
 		dataType: int64
 		formatString: 0
-		lineageTag: b8b474e7-0112-4838-a1d1-b874fce60b2f
+		lineageTag: 373405b1-00bc-45a1-ab70-f833c40fab03
 		summarizeBy: sum
 		sourceColumn: gross_sales_budget
 
@@ -40,34 +49,34 @@ table fact_budget
 	column discount_budget
 		dataType: int64
 		formatString: 0
-		lineageTag: 07e38c46-25f3-4713-8503-b837840a7e96
+		lineageTag: 1611359b-5e32-47ef-b38f-0595c8770386
 		summarizeBy: sum
 		sourceColumn: discount_budget
-
-		annotation SummarizationSetBy = Automatic
-
-	column cost_budget
-		dataType: int64
-		formatString: 0
-		lineageTag: e1d546c1-ab5d-4e87-82a8-002d7ba3774a
-		summarizeBy: sum
-		sourceColumn: cost_budget
 
 		annotation SummarizationSetBy = Automatic
 
 	column net_sales_budget
 		dataType: int64
 		formatString: 0
-		lineageTag: 8a6c3525-8001-4154-aeee-3117f1e5e280
+		lineageTag: 0506df71-052d-48f3-b725-09d4add8dad5
 		summarizeBy: sum
 		sourceColumn: net_sales_budget
+
+		annotation SummarizationSetBy = Automatic
+
+	column cost_budget
+		dataType: int64
+		formatString: 0
+		lineageTag: 6355bdd3-d6e0-4c2d-bfd4-19c0a4ce347b
+		summarizeBy: sum
+		sourceColumn: cost_budget
 
 		annotation SummarizationSetBy = Automatic
 
 	column gross_profit_budget
 		dataType: int64
 		formatString: 0
-		lineageTag: d5fc52dc-e57f-4d65-87fa-f60bc6b4f0f8
+		lineageTag: 680a726f-7b92-4beb-8f6e-7e6e39740c1e
 		summarizeBy: sum
 		sourceColumn: gross_profit_budget
 
@@ -77,11 +86,13 @@ table fact_budget
 		mode: import
 		source =
 				let
-				    Source = Csv.Document(File.Contents("C:\Projects\cafe-retail-data-generator\fact_budget.csv"),[Delimiter=",", Columns=8, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    Source = Csv.Document(File.Contents("C:\Projects\cafe-retail-data-generator\fact_budget.csv"),[Delimiter=",", Columns=9, Encoding=1252, QuoteStyle=QuoteStyle.None]),
 				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
-				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"outlet_id", Int64.Type}, {"year_month_id", Int64.Type}, {"product_id", Int64.Type}, {"gross_sales_budget", Int64.Type}, {"discount_budget", Int64.Type}, {"cost_budget", Int64.Type}, {"net_sales_budget", Int64.Type}, {"gross_profit_budget", Int64.Type}})
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"outlet_id", Int64.Type}, {"year_month_id", Int64.Type}, {"product_id", Int64.Type}, {"cups_sold_budget", Int64.Type}, {"gross_sales_budget", Int64.Type}, {"discount_budget", Int64.Type}, {"net_sales_budget", Int64.Type}, {"cost_budget", Int64.Type}, {"gross_profit_budget", Int64.Type}})
 				in
 				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
 
 	annotation PBI_ResultType = Table
 

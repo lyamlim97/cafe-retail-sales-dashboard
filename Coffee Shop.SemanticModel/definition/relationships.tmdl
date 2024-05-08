@@ -15,21 +15,20 @@ relationship 3ed0e39a-5eed-4a97-bd19-ef038a3f3f9b
 	fromColumn: dim_date.order_date
 	toColumn: LocalDateTable_3b820515-792d-4ace-a161-9ef9c2d3b9cd.Date
 
-relationship AutoDetected_28e73ffd-2841-481e-a77c-f0d462005df7
-	fromColumn: fact_budget.product_id
-	toColumn: dim_product.product_id
-
-relationship AutoDetected_645bef60-cbd2-4a43-9d46-f2e47c0ef6c5
-	fromColumn: fact_budget.outlet_id
-	toColumn: dim_outlet.outlet_id
-
 relationship AutoDetected_9c47c6ba-1d8d-4515-bd0e-f94df3eac0a4
 	fromColumn: fact_sales.order_date_id
 	toColumn: dim_date.order_date_id
 
-relationship c4e492a1-7e28-4f36-a51d-e79b611e40dc
+relationship AutoDetected_fe9e2e18-f803-42c5-ab19-7fef750b5f9c
+	fromColumn: fact_budget.product_id
+	toColumn: dim_product.product_id
+
+relationship AutoDetected_43329d06-f1e8-42a8-85c9-e8b854b1c01d
+	fromColumn: fact_budget.outlet_id
+	toColumn: dim_outlet.outlet_id
+
+relationship bf9d4e3e-ddc4-4a0e-b527-a2e3f6c89710
 	isActive: false
-	crossFilteringBehavior: bothDirections
 	toCardinality: many
 	fromColumn: fact_budget.year_month_id
 	toColumn: dim_date.year_month_id

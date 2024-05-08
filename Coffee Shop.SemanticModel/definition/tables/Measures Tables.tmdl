@@ -102,6 +102,46 @@ table 'Measures Tables'
 		formatString: #,0.00
 		lineageTag: 741f72dd-38f3-48be-a237-920c48092b9b
 
+	measure 'Cups Sold Budget' = CALCULATE(SUM(fact_budget[cups_sold_budget]), USERELATIONSHIP(dim_date[year_month_id], fact_budget[year_month_id]))
+		formatString: #,0
+		lineageTag: 505cd260-3c16-404c-947b-8c69c3fffc7f
+
+	measure 'Cups Sold' = SUM(fact_sales[unit_count])
+		formatString: #,0
+		lineageTag: bf8af419-8c6c-4160-b37a-657ac3ea933d
+
+	measure 'Cups Sold (LM)' =
+			
+			VAR selected_month = MAX(dim_date[month_no])
+			VAR selected_year = MAX(dim_date[year_no])
+			
+			VAR result = IF(selected_month == 1,
+			        CALCULATE((SUM(fact_sales[unit_count])) + 0 , FILTER(
+			            ALL(dim_date),
+			            dim_date[month_no] = 12 &&
+			            dim_date[year_no] = MAX(dim_date[year_no]) - 1
+			        )),
+			        CALCULATE((SUM(fact_sales[unit_count])) + 0 , FILTER(
+			            ALL(dim_date),
+			            dim_date[month_no] = selected_month - 1 &&
+			            dim_date[year_no] = selected_year
+			        )))
+			
+			RETURN result
+		formatString: #,0
+		lineageTag: 5bd376f9-cbe8-4a6b-b8b2-2c265a744831
+
+	measure 'Cups Sold (SMLY)' = ```
+			CALCULATE((SUM(fact_sales[unit_count])) + 0 , FILTER(
+			            ALL(dim_date),
+			            dim_date[month_no] = MAX(dim_date[month_no]) &&
+			            dim_date[year_no] = MAX(dim_date[year_no]) - 1
+			        ))
+			
+			```
+		formatString: #,0
+		lineageTag: 16a6481d-876b-42e2-9c76-16c69e34b91e
+
 	partition 'Measures Tables' = m
 		mode: import
 		source =
